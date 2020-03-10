@@ -5,13 +5,15 @@ import time
 import os
 
 from bs4 import BeautifulSoup as bs
+from getpass import getpass
 from random import randint
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 
+
 ######################################
 login = input('Enter your login from Nokia portal: ')
-password = input('Enter your password from Nokia portal: ')
+password = getpass('Enter your password from Nokia portal (password will be hide): ')
 
 executor_list = {
     u'nikita.baranov@nokia.com' : u'Баранов Никита Викторович',
@@ -183,15 +185,15 @@ while True:
         driver.get('https://portal.voronezh.gdc.nokia.com/nsn-portal/ims/events/events.jsf')
         time.sleep(2)
         lis = driver.find_elements_by_xpath("/html/body/div[4]/div[2]/div/form/div[2]/div[4]/select/option[3]")[0].click()
-        time.sleep(2)
-        events_list = driver.find_element_by_id('eventsFormId:eventsTableId_data')
-        events_list = events_list.get_attribute("outerHTML")
+        time.sleep(3)
+        events_table = driver.find_element_by_id('eventsFormId:eventsTableId_data')
+        events_table = events_table.get_attribute("outerHTML")
 
-        soup = bs(events_list, "lxml")
-        events_list = soup.find_all('tr')
+        soup = bs(events_table, "lxml")
+        events_table = soup.find_all('tr')
         events_list = []
 
-        for line in events_list:
+        for line in events_table:
             tags = line.find_all('td')
             if tags[2].text != "Ожидание":
                 link = tags[3].find('a')
