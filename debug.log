@@ -1,0 +1,34 @@
+[0312/004710.873:ERROR:http_transport_win.cc(276)] WinHttpSendRequest: The operation completed successfully. (0x0)
+[0316/075546.305:ERROR:process_reader_win.cc(123)] NtOpenThread: {Access Denied} A process has requested access to an object, but has not been granted those access rights. (0xc0000022)
+[0316/075546.321:ERROR:exception_snapshot_win.cc(98)] thread ID 121084 not found in process
+[0316/075546.321:ERROR:process_reader_win.cc(123)] NtOpenThread: {Access Denied} A process has requested access to an object, but has not been granted those access rights. (0xc0000022)
+[0316/075546.321:ERROR:exception_snapshot_win.cc(98)] thread ID 152780 not found in process
+[0318/084339.863:ERROR:process_reader_win.cc(123)] NtOpenThread: {Access Denied} A process has requested access to an object, but has not been granted those access rights. (0xc0000022)
+[0318/084339.873:ERROR:exception_snapshot_win.cc(98)] thread ID 379572 not found in process
+[0318/084339.892:ERROR:process_reader_win.cc(123)] NtOpenThread: {Access Denied} A process has requested access to an object, but has not been granted those access rights. (0xc0000022)
+[0318/084339.892:ERROR:exception_snapshot_win.cc(98)] thread ID 379304 not found in process
+[0320/080512.819:ERROR:process_reader_win.cc(151)] SuspendThread: Access is denied. (0x5)
+[0320/080512.839:ERROR:process_reader_win.cc(151)] SuspendThread: Access is denied. (0x5)
+[0320/080512.839:ERROR:process_reader_win.cc(123)] NtOpenThread: {Access Denied} A process has requested access to an object, but has not been granted those access rights. (0xc0000022)
+[0320/080512.840:ERROR:exception_snapshot_win.cc(98)] thread ID 501388 not found in process
+[0320/080512.840:ERROR:process_reader_win.cc(151)] SuspendThread: Access is denied. (0x5)
+[0320/080512.840:ERROR:process_reader_win.cc(151)] SuspendThread: Access is denied. (0x5)
+[0320/080512.841:ERROR:process_reader_win.cc(151)] SuspendThread: Access is denied. (0x5)
+[0320/080512.841:ERROR:process_reader_win.cc(151)] SuspendThread: Access is denied. (0x5)
+[0320/080512.841:ERROR:process_reader_win.cc(123)] NtOpenThread: {Access Denied} A process has requested access to an object, but has not been granted those access rights. (0xc0000022)
+[0320/080512.841:ERROR:exception_snapshot_win.cc(98)] thread ID 501392 not found in process
+[0320/080512.844:ERROR:process_reader_win.cc(151)] SuspendThread: Access is denied. (0x5)
+[0320/080512.850:ERROR:process_reader_win.cc(123)] NtOpenThread: {Access Denied} A process has requested access to an object, but has not been granted those access rights. (0xc0000022)
+[0320/080512.851:ERROR:exception_snapshot_win.cc(98)] thread ID 501400 not found in process
+[0320/080512.858:ERROR:process_reader_win.cc(151)] SuspendThread: Access is denied. (0x5)
+[0320/080512.858:ERROR:process_reader_win.cc(123)] NtOpenThread: {Access Denied} A process has requested access to an object, but has not been granted those access rights. (0xc0000022)
+[0320/080512.858:ERROR:exception_snapshot_win.cc(98)] thread ID 501404 not found in process
+[0320/133641.625:ERROR:process_reader_win.cc(151)] SuspendThread: Access is denied. (0x5)
+[0320/133641.726:ERROR:process_reader_win.cc(151)] SuspendThread: Access is denied. (0x5)
+[0320/133641.726:ERROR:process_reader_win.cc(151)] SuspendThread: Access is denied. (0x5)
+[0320/133641.726:ERROR:process_reader_win.cc(151)] SuspendThread: Access is denied. (0x5)
+[0320/133641.726:ERROR:process_reader_win.cc(151)] SuspendThread: Access is denied. (0x5)
+[0320/133641.705:ERROR:process_reader_win.cc(123)] NtOpenThread: {Access Denied} A process has requested access to an object, but has not been granted those access rights. (0xc0000022)
+[0320/133641.726:ERROR:exception_snapshot_win.cc(98)] thread ID 533172 not found in process
+[0320/133641.726:ERROR:process_reader_win.cc(123)] NtOpenThread: {Access Denied} A process has requested access to an object, but has not been granted those access rights. (0xc0000022)
+[0320/133641.734:ERROR:exception_snapshot_win.cc(98)] thread ID 521948 not found in process

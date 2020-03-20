@@ -3,6 +3,7 @@
 import datetime
 import time
 import os
+import sys
 
 from bs4 import BeautifulSoup as bs
 from getpass import getpass
@@ -113,6 +114,7 @@ def toExecutor(status, email):
             toLog("назначен на ", executor_list[email], event["id"])
         except:
             toLog("Произошла ошибка при назначении", "", event["id"])
+            toLog(sys.exc_info()[1],"","")
 
 # to take event in work
 def toWork(email):
@@ -130,6 +132,7 @@ def toWork(email):
             toLog("взят в работу ", executor_list[email], event["id"])
         except:
             toLog("Произошла ошибка при взятии в работу", "", event["id"])
+            toLog(sys.exc_info()[1],"","")
 
 # to close event 
 def toClose(email, event_id):
@@ -150,6 +153,7 @@ def toClose(email, event_id):
             toLog("закрыт на", executor_list[email], event_id)
         except:
             toLog("Произошла ошибка при закрытии", "", event_id)
+            toLog(sys.exc_info()[1],"","")
 
 
 # start browser and autorization on nokia portal
@@ -179,6 +183,7 @@ while True:
         try:
             driver.get_window_position(windowHandle='current')
         except:
+            print(sys.exc_info()[1])
             driver = startBrowser()
 
         # get list of events
@@ -241,6 +246,7 @@ while True:
                     toClose(email, event["id"])
                     in_work.pop(email)
     except:
+        print(sys.exc_info()[1])
         print(f"{timenow()} ошибка в цикле")
 
     #repeat after 5 minutes
