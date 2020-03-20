@@ -114,7 +114,6 @@ def toExecutor(status, email, event):
             toLog("назначен на ", executor_list[email], event["id"])
         except:
             toLog("Произошла ошибка при назначении", "", event["id"])
-            toLog(sys.exc_info()[1],"","")
 
 # to take event in work
 def toWork(email, event):
@@ -132,7 +131,6 @@ def toWork(email, event):
             toLog("взят в работу ", executor_list[email], event["id"])
         except:
             toLog("Произошла ошибка при взятии в работу", "", event["id"])
-            toLog(sys.exc_info()[1],"","")
 
 # to close event 
 def toClose(email, event_id):
@@ -153,7 +151,6 @@ def toClose(email, event_id):
             toLog("закрыт на", executor_list[email], event_id)
         except:
             toLog("Произошла ошибка при закрытии", "", event_id)
-            toLog(sys.exc_info()[1],"","")
 
 
 # start browser
