@@ -90,7 +90,7 @@ def toLog(do, name, id):
         log.write(str(tolog))
 
 # To appoint event to executor
-def toExecutor(status, email):
+def toExecutor(status, email, event):
     if status == good_status[0]:
         try:
             driver.find_element_by_xpath('/html/body/div[4]/div[3]/div/form/div[1]/div/button[3]/span').click()
@@ -117,7 +117,7 @@ def toExecutor(status, email):
             toLog(sys.exc_info()[1],"","")
 
 # to take event in work
-def toWork(email):
+def toWork(email, event):
         try:
             driver.find_element_by_id('eventDetailsFormId:repe:3:btn').click()
             time.sleep(2)
@@ -156,13 +156,16 @@ def toClose(email, event_id):
             toLog(sys.exc_info()[1],"","")
 
 
-# start browser and autorization on nokia portal
+# start browser
 def startBrowser():
     if os.name == "nt":
         driver = webdriver.Chrome("Driver\\windows.exe")
     else:
         driver = webdriver.Chrome('Driver/linux')
-    driver.maximize_window()
+    return driver
+
+# autorization on nokia portal
+def autorization(driver):
     driver.get('https://portal.voronezh.gdc.nokia.com/nsn-portal/index.jsf')
     time.sleep(1)
     login_form = driver.find_element_by_id('frmLogin:username')
@@ -172,12 +175,78 @@ def startBrowser():
     pass_form.send_keys(password)
     driver.find_element_by_id('frmLogin:btnLogin').click()
     time.sleep(1)
-    return driver
 
+def workWithEventCicle(a):
+    global countFor
+    for i in range(a, len(events_list)):
+        countFor = i
+        workWithEvent(events_list[i])
+
+
+def workWithEvent(event):
+    driver.get(f'https://portal.voronezh.gdc.nokia.com/nsn-portal/ims/events/eventOne.jsf?id={event["id"]}')
+    time.sleep(1)
+
+    table = getTable()
+    status = getStatus(table)
+    email = getEmail(table)
+
+    # if its our event to appoint to executor
+    if status == good_status[0] and email in executor_list.keys():
+        toExecutor(status, email, event)
+        time.sleep(2)
+        status = getStatus(getTable())
+    # if event already appoint check event in work and if event in work more 5 minutes close is and to take new
+    if status == good_status[1] and email in executor_list.keys():
+        if email in in_work:
+            if checkTime(in_work[email][1], datetime.datetime.now(), 5):
+                driver.get(f'https://portal.voronezh.gdc.nokia.com/nsn-portal/ims/events/eventOne.jsf?id={in_work[email][0]}')
+                time.sleep(1)
+                toClose(email, in_work[email][0])
+                in_work.pop(email)
+                driver.get(f'https://portal.voronezh.gdc.nokia.com/nsn-portal/ims/events/eventOne.jsf?id={event["id"]}')
+                time.sleep(1)
+                toWork(email, event)
+        else:
+            toWork(email, event)
+    #if event already in work, add its to "in_work" list and check time in work
+    elif status == good_status[2] and email in executor_list.keys():
+        if email not in in_work:
+            in_work.update({email : [event["id"], getDate(getTable())]})
+        elif checkTime(getDate(table), datetime.datetime.now(), 120):
+            toClose(email, event["id"])
+            in_work.pop(email) 
+
+    # get list of events
+def getEventList(driver):
+    driver.get('https://portal.voronezh.gdc.nokia.com/nsn-portal/ims/events/events.jsf')
+    time.sleep(2)
+    driver.find_elements_by_xpath("/html/body/div[4]/div[2]/div/form/div[2]/div[4]/select/option[3]")[0].click()
+    time.sleep(3)
+    events_table = driver.find_element_by_id('eventsFormId:eventsTableId_data')
+    events_table = events_table.get_attribute("outerHTML")
+
+    soup = bs(events_table, "lxml")
+    events_table = soup.find_all('tr')
+    events_list = []
+
+    for line in events_table:
+        tags = line.find_all('td')
+        if tags[2].text != "Ожидание":
+            link = tags[3].find('a')
+            span = tags[17].find('span')
+            
+            events_list.append({
+                'status' : tags[2].text,
+                'id' : link.get('title'),
+                'executor' : span.text
+            })
+    return events_list        
 
 driver = startBrowser()
 
 while True:
+    countFor = 0
     try:
         # check run browser
         try:
@@ -185,69 +254,27 @@ while True:
         except:
             print(sys.exc_info()[1])
             driver = startBrowser()
+            autorization(driver)
 
-        # get list of events
-        driver.get('https://portal.voronezh.gdc.nokia.com/nsn-portal/ims/events/events.jsf')
-        time.sleep(2)
-        lis = driver.find_elements_by_xpath("/html/body/div[4]/div[2]/div/form/div[2]/div[4]/select/option[3]")[0].click()
-        time.sleep(3)
-        events_table = driver.find_element_by_id('eventsFormId:eventsTableId_data')
-        events_table = events_table.get_attribute("outerHTML")
-
-        soup = bs(events_table, "lxml")
-        events_table = soup.find_all('tr')
-        events_list = []
-
-        for line in events_table:
-            tags = line.find_all('td')
-            if tags[2].text != "Ожидание":
-                link = tags[3].find('a')
-                span = tags[17].find('span')
-                
-                events_list.append({
-                    'status' : tags[2].text,
-                    'id' : link.get('title'),
-                    'executor' : span.text
-                })
+        try:
+            events_list = getEventList(driver)
+        except:
+            autorization(driver)
+            events_list = getEventList(driver)
 
         # Go events in revers list 
         events_list.reverse()
-        for event in events_list:
-            driver.get(f'https://portal.voronezh.gdc.nokia.com/nsn-portal/ims/events/eventOne.jsf?id={event["id"]}')
-            time.sleep(1)
-
-            table = getTable()
-            status = getStatus(table)
-            email = getEmail(table)
-
-            # if its our event to appoint to executor
-            if status == good_status[0] and email in executor_list.keys():
-                toExecutor(status, email)
-                time.sleep(2)
-                status = getStatus(getTable())
-            # if event already appoint check event in work and if event in work more 5 minutes close is and to take new
-            if status == good_status[1] and email in executor_list.keys():
-                if email in in_work:
-                    if checkTime(in_work[email][1], datetime.datetime.now(), 5):
-                        driver.get(f'https://portal.voronezh.gdc.nokia.com/nsn-portal/ims/events/eventOne.jsf?id={in_work[email][0]}')
-                        time.sleep(1)
-                        toClose(email, in_work[email][0])
-                        in_work.pop(email)
-                        driver.get(f'https://portal.voronezh.gdc.nokia.com/nsn-portal/ims/events/eventOne.jsf?id={event["id"]}')
-                        time.sleep(1)
-                        toWork(email)
-                else:
-                    toWork(email)
-            #if event already in work, add its to "in_work" list and check time in work
-            elif status == good_status[2] and email in executor_list.keys():
-                if email not in in_work:
-                    in_work.update({email : [event["id"], getDate(getTable())]})
-                elif checkTime(getDate(table), datetime.datetime.now(), 120):
-                    toClose(email, event["id"])
-                    in_work.pop(email)
+        try:
+            workWithEventCicle(countFor)
+            
+        except:
+            print(f"{timenow()} ошибка в цикле for продолжить с элемента {countFor}")
+            print(sys.exc_info()[1])
+            workWithEventCicle(countFor)
     except:
+        print(f"{timenow()} ошибка в цикле while")
         print(sys.exc_info()[1])
-        print(f"{timenow()} ошибка в цикле")
+        continue
 
     #repeat after 5 minutes
     print(f"{timenow()} в работе:")
