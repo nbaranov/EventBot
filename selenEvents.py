@@ -86,7 +86,7 @@ def timenow():
 # write to log
 def toLog(do, name, id):
     tolog = f'{timenow()} ивент {id} {do} {name}. https://portal.voronezh.gdc.nokia.com/nsn-portal/ims/events/eventOne.jsf?id={id}\n'
-    with open("logs.txt", "a", encoding="utf-8") as log:
+    with open("logs.log", "a", encoding="utf-8") as log:
         log.write(str(tolog))
 
 # To appoint event to executor
@@ -175,9 +175,14 @@ def autorization(driver):
 
 def workWithEventCicle(a):
     global countFor
-    for i in range(a, len(events_list)):
-        countFor = i
-        workWithEvent(events_list[i])
+    try:
+        for i in range(a, len(events_list)):
+            countFor = i
+            workWithEvent(events_list[i])
+    except:
+        print(f"{timenow()} ошибка в цикле for продолжить с элемента {countFor}")
+        print(sys.exc_info()[1])
+        workWithEventCicle(countFor)
 
 
 def workWithEvent(event):
@@ -209,6 +214,14 @@ def workWithEvent(event):
     #if event already in work, add its to "in_work" list and check time in work
     elif status == good_status[2] and email in executor_list.keys():
         if email not in in_work:
+            in_work.update({email : [event["id"], getDate(getTable())]})
+        elif email in in_work and in_work[email][0] != event["id"]:
+            driver.get(f'https://portal.voronezh.gdc.nokia.com/nsn-portal/ims/events/eventOne.jsf?id={in_work[email][0]}')
+            time.sleep(1)
+            toClose(email, in_work[email][0])
+            in_work.pop(email)
+            driver.get(f'https://portal.voronezh.gdc.nokia.com/nsn-portal/ims/events/eventOne.jsf?id={event["id"]}')
+            time.sleep(1)
             in_work.update({email : [event["id"], getDate(getTable())]})
         elif checkTime(getDate(table), datetime.datetime.now(), 120):
             toClose(email, event["id"])
@@ -261,13 +274,8 @@ while True:
 
         # Go events in revers list 
         events_list.reverse()
-        try:
-            workWithEventCicle(countFor)
+        workWithEventCicle(countFor)
             
-        except:
-            print(f"{timenow()} ошибка в цикле for продолжить с элемента {countFor}")
-            print(sys.exc_info()[1])
-            workWithEventCicle(countFor)
     except:
         print(f"{timenow()} ошибка в цикле while")
         print(sys.exc_info()[1])
