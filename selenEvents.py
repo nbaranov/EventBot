@@ -26,7 +26,8 @@ executor_list = {
     u'stanislav.baranov@nokia.com' : u'Баранов Станислав Евгеньевич',
     u'nikita.lychagin@nokia.com' : u'Лычагин Никита Вячеславович',
     u'dmitry.zaytcev@nokia.com' : u'Зайцев Дмитрий Андреевич',
-    u'aleksandr.matveev@nokia.com' : u'Матвеев Александр Юрьевич'
+    u'aleksandr.matveev@nokia.com' : u'Матвеев Александр Юрьевич',
+#    u'maxim.rozenshtein@nokia.com' : u'Розенштейн Максим Яковлевич'
 }
 
 good_status = [
@@ -36,6 +37,7 @@ good_status = [
 ]
 
 in_work = {}
+unknowt_executor = []
 ######################################
 
     ### functions ###
@@ -175,13 +177,16 @@ def autorization(driver):
 
 def workWithEventCicle(a):
     global countFor
+    global unknowt_executor
     try:
         for i in range(a, len(events_list)):
             countFor = i
-            workWithEvent(events_list[i])
+            if events_list[i] not in unknowt_executor:
+                workWithEvent(events_list[i])
     except:
         print(f"{timenow()} ошибка в цикле for продолжить с элемента {countFor}")
         print(sys.exc_info()[1])
+        driver.refresh()
         workWithEventCicle(countFor)
 
 
@@ -193,6 +198,9 @@ def workWithEvent(event):
     status = getStatus(table)
     email = getEmail(table)
 
+    if email not in executor_list.keys():
+        unknowt_executor.append(event)
+        return
     # if its our event to appoint to executor
     if status == good_status[0] and email in executor_list.keys():
         toExecutor(status, email, event)
@@ -256,6 +264,7 @@ def getEventList(driver):
 driver = startBrowser()
 
 while True:
+    satrtTime = datetime.datetime.now()
     countFor = 0
     try:
         # check run browser
@@ -285,6 +294,8 @@ while True:
     print(f"{timenow()} в работе:")
     for line in in_work:
         print(line, in_work[line])
-    time.sleep(300)
-    
-      
+    print(f"{timenow()} Пропускаем:")
+    for line in unknowt_executor:
+        print(line)
+    if not checkTime(satrtTime, datetime.datetime.now(), 5):
+        time.sleep(300)
