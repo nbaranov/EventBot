@@ -7,9 +7,11 @@ import sys
 
 from bs4 import BeautifulSoup as bs
 from getpass import getpass
+from pyvirtualdisplay import Display
 from random import randint
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.chrome.options import Options
 
 
 ######################################
@@ -259,9 +261,15 @@ def getEventList(driver):
                 'id' : link.get('title'),
                 'executor' : span.text
             })
-    return events_list        
+    return events_list    
+
+def clearUnknowtExecutorList(unknowt_executor, events_list):
+    for event in unknowt_executor:
+        if event not in events_list:
+            unknowt_executor.remove(event)    
 
 driver = startBrowser()
+autorization(driver)
 
 while True:
     satrtTime = datetime.datetime.now()
@@ -283,6 +291,7 @@ while True:
 
         # Go events in revers list 
         events_list.reverse()
+        clearUnknowtExecutorList(unknowt_executor, events_list)
         workWithEventCicle(countFor)
             
     except:
@@ -290,12 +299,12 @@ while True:
         print(sys.exc_info()[1])
         continue
 
-    #repeat after 5 minutes
     print(f"{timenow()} в работе:")
     for line in in_work:
         print(line, in_work[line])
     print(f"{timenow()} Пропускаем:")
     for line in unknowt_executor:
         print(line)
+    #repeat after 5 minutes
     if not checkTime(satrtTime, datetime.datetime.now(), 5):
         time.sleep(300)
