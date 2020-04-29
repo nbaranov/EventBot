@@ -7,7 +7,6 @@ import sys
 
 from bs4 import BeautifulSoup as bs
 from getpass import getpass
-from pyvirtualdisplay import Display
 from random import randint
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
