@@ -88,7 +88,7 @@ def timenow():
 
 # write to log
 def toLog(do, name, id):
-    tolog = f'{timenow()} ивент {id} {do} {name}. https://portal.voronezh.gdc.nokia.com/nsn-portal/ims/events/eventOne.jsf?id={id}\n'
+    tolog = f'{timenow()} ивент {id} {do} {name}. https://portal.voronezh.gdc.nokia.com/nsn-portal/ims/works/workOne.jsf?id={id}\n'
     with open("logs.log", "a", encoding="utf-8") as log:
         log.write(str(tolog))
 
@@ -100,13 +100,13 @@ def toExecutor(status, email, event):
             time.sleep(3)
             executor_form = driver.find_element_by_id('changeEventStatusDlgForm:executorOneMenuId_label').click()
             time.sleep(1)
-            executor_form = driver.find_elements_by_xpath('/html/body/div[35]/div[1]/input')
+            executor_form = driver.find_elements_by_xpath('/html/body/div[34]/div[1]/input')
             executor_form[0].send_keys(executor_list[email])
             time.sleep(0.3)
             executor_form[0].send_keys(Keys.RETURN)
             driver.find_element_by_id('changeEventStatusDlgForm:changeEventDialogActivityTypesId_label').click()
             time.sleep(0.3)
-            activity_form = driver.find_element_by_xpath('/html/body/div[36]/div[1]/input')
+            activity_form = driver.find_element_by_xpath('/html/body/div[35]/div[1]/input')
             time.sleep(0.3)
             activity_form.send_keys(u"Creation/deletion of VPLS service")
             time.sleep(0.3)
@@ -192,7 +192,7 @@ def workWithEventCicle(a):
 
 
 def workWithEvent(event):
-    driver.get(f'https://portal.voronezh.gdc.nokia.com/nsn-portal/ims/events/eventOne.jsf?id={event["id"]}')
+    driver.get(f'https://portal.voronezh.gdc.nokia.com/nsn-portal/ims/works/workOne.jsf?id={event["id"]}')
     time.sleep(1)
 
     table = getTable()
@@ -211,11 +211,11 @@ def workWithEvent(event):
     if status == good_status[1] and email in executor_list.keys():
         if email in in_work:
             if checkTime(in_work[email][1], datetime.datetime.now(), 5):
-                driver.get(f'https://portal.voronezh.gdc.nokia.com/nsn-portal/ims/events/eventOne.jsf?id={in_work[email][0]}')
+                driver.get(f'https://portal.voronezh.gdc.nokia.com/nsn-portal/ims/works/workOne.jsf?id={in_work[email][0]}')
                 time.sleep(1)
                 toClose(email, in_work[email][0])
                 in_work.pop(email)
-                driver.get(f'https://portal.voronezh.gdc.nokia.com/nsn-portal/ims/events/eventOne.jsf?id={event["id"]}')
+                driver.get(f'https://portal.voronezh.gdc.nokia.com/nsn-portal/ims/works/workOne.jsf?id={event["id"]}')
                 time.sleep(1)
                 toWork(email, event)
         else:
@@ -225,11 +225,11 @@ def workWithEvent(event):
         if email not in in_work:
             in_work.update({email : [event["id"], getDate(getTable())]})
         elif email in in_work and in_work[email][0] != event["id"]:
-            driver.get(f'https://portal.voronezh.gdc.nokia.com/nsn-portal/ims/events/eventOne.jsf?id={in_work[email][0]}')
+            driver.get(f'https://portal.voronezh.gdc.nokia.com/nsn-portal/ims/works/workOne.jsf?id={in_work[email][0]}')
             time.sleep(1)
             toClose(email, in_work[email][0])
             in_work.pop(email)
-            driver.get(f'https://portal.voronezh.gdc.nokia.com/nsn-portal/ims/events/eventOne.jsf?id={event["id"]}')
+            driver.get(f'https://portal.voronezh.gdc.nokia.com/nsn-portal/ims/works/workOne.jsf?id={event["id"]}')
             time.sleep(1)
             in_work.update({email : [event["id"], getDate(getTable())]})
         elif checkTime(getDate(table), datetime.datetime.now(), 120):
@@ -238,7 +238,7 @@ def workWithEvent(event):
 
     # get list of events
 def getEventList(driver):
-    driver.get('https://portal.voronezh.gdc.nokia.com/nsn-portal/ims/events/events.jsf')
+    driver.get('https://portal.voronezh.gdc.nokia.com/nsn-portal/ims/works/works.jsf')
     time.sleep(2)
     driver.find_elements_by_xpath("/html/body/div[4]/div[2]/div/form/div[2]/div[4]/select/option[3]")[0].click()
     time.sleep(3)
