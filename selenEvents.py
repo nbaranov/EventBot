@@ -91,6 +91,7 @@ def toLog(do, name, id):
     tolog = f'{timenow()} ивент {id} {do} {name}. https://portal.voronezh.gdc.nokia.com/nsn-portal/ims/works/workOne.jsf?id={id}\n'
     with open("logs.log", "a", encoding="utf-8") as log:
         log.write(str(tolog))
+    print(tolog)
 
 # To appoint event to executor
 def toExecutor(status, email, event):
@@ -161,7 +162,9 @@ def startBrowser():
     if os.name == "nt":
         driver = webdriver.Chrome("Driver\\windows.exe")
     else:
-        driver = webdriver.Chrome('Driver/linux')
+        hide = webdriver.FirefoxOptions()
+        hide.headless = True
+        driver = webdriver.Firefox(executable_path='Driver/geckodriver', options=hide)        
     return driver
 
 # autorization on nokia portal
@@ -175,6 +178,7 @@ def autorization(driver):
     pass_form.send_keys(password)
     driver.find_element_by_id('frmLogin:btnLogin').click()
     time.sleep(1)
+    print("Выполнена авторизация")
 
 def workWithEventCicle(a):
     global countFor
@@ -183,7 +187,20 @@ def workWithEventCicle(a):
         for i in range(a, len(events_list)):
             countFor = i
             if events_list[i] not in unknowt_executor:
-                workWithEvent(events_list[i])
+                print("Ивент наш")
+                check_list =  in_work.values()
+                print(check_list)
+                for item in check_list:
+                    try:
+                        print(events_list[i], item[0])
+                        if events_list[i] == item[0]:
+                            continue
+                        else:
+                            print("Не в работе")
+                            workWithEvent(events_list[i])
+                    except:
+                        workWithEvent(events_list[i])
+                        continue
     except:
         print(f"{timenow()} ошибка в цикле for продолжить с элемента {countFor}")
         print(sys.exc_info()[1])
@@ -193,6 +210,7 @@ def workWithEventCicle(a):
 
 def workWithEvent(event):
     driver.get(f'https://portal.voronezh.gdc.nokia.com/nsn-portal/ims/works/workOne.jsf?id={event["id"]}')
+    print(f'Открыт event {event["id"]}')
     time.sleep(1)
 
     table = getTable()
