@@ -187,20 +187,7 @@ def workWithEventCicle(a):
         for i in range(a, len(events_list)):
             countFor = i
             if events_list[i] not in unknowt_executor:
-                print("Ивент наш")
-                check_list =  in_work.values()
-                print(check_list)
-                for item in check_list:
-                    try:
-                        print(events_list[i], item[0])
-                        if events_list[i] == item[0]:
-                            continue
-                        else:
-                            print("Не в работе")
-                            workWithEvent(events_list[i])
-                    except:
-                        workWithEvent(events_list[i])
-                        continue
+                workWithEvent(events_list[i])
     except:
         print(f"{timenow()} ошибка в цикле for продолжить с элемента {countFor}")
         print(sys.exc_info()[1])
