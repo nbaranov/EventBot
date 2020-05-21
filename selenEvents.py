@@ -162,10 +162,10 @@ def startBrowser():
     if os.name == "nt":
         driver = webdriver.Chrome("Driver\\windows.exe")
     else:
-        #hide = webdriver.FirefoxOptions()
-        #hide.headless = True
-        #driver = webdriver.Firefox(executable_path='Driver/geckodriver', options=hide)
-        driver = webdriver.Firefox(executable_path='Driver/geckodriver')        
+        hide = webdriver.FirefoxOptions()
+        hide.headless = True
+        driver = webdriver.Firefox(executable_path='Driver/geckodriver', options=hide)
+        #driver = webdriver.Firefox(executable_path='Driver/geckodriver')        
     return driver
 
 # autorization on nokia portal
