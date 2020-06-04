@@ -105,13 +105,13 @@ def toExecutor(status, email, event):
             executor_form[0].send_keys(executor_list[email])
             time.sleep(0.6)
             executor_form[0].send_keys(Keys.RETURN)
-            driver.find_element_by_id('changeEventStatusDlgForm:changeEventDialogActivityTypesId_label').click()
-            time.sleep(0.6)
-            activity_form = driver.find_element_by_xpath('/html/body/div[35]/div[1]/input')
-            time.sleep(0.6)
-            activity_form.send_keys(u"Creation/deletion of VPLS service")
-            time.sleep(0.6)
-            activity_form.send_keys(Keys.RETURN)
+            #driver.find_element_by_id('changeEventStatusDlgForm:changeEventDialogActivityTypesId_label').click()
+            #time.sleep(0.6)
+            #activity_form = driver.find_element_by_xpath('/html/body/div[35]/div[1]/input')
+            #time.sleep(0.6)
+            #activity_form.send_keys(u"Creation/deletion of VPLS service")
+            #time.sleep(0.6)
+            #activity_form.send_keys(Keys.RETURN)
             time.sleep(0.6)
             driver.find_element_by_id('changeEventStatusDlgForm:changeEventStatusBtn').click()
             time.sleep(2)
@@ -125,8 +125,8 @@ def toWork(email, event):
             driver.find_element_by_id('eventDetailsFormId:repe:3:btn').click()
             time.sleep(2)
             button = driver.find_elements_by_id('changeEventStatusDlgForm:startTimeCalendarId_input')
-            button[0].click()
-            time.sleep(0.3)
+            #button[0].click()
+            #time.sleep(0.3)
             button[0].send_keys(Keys.TAB)
             time.sleep(0.3)
             driver.find_element_by_id('changeEventStatusDlgForm:changeEventStatusBtn').click()
@@ -146,8 +146,8 @@ def toClose(email, event_id):
             driver.find_element_by_id('eventDetailsFormId:repe:5:btn').click()
             time.sleep(3)
             button = driver.find_elements_by_id('changeEventStatusDlgForm:finishTimeCalendarId_input')
-            button[0].click()
-            time.sleep(0.3)
+            #button[0].click()
+            #time.sleep(0.3)
             button[0].send_keys(Keys.TAB)
             time.sleep(0.3)
             driver.find_element_by_id('changeEventStatusDlgForm:changeEventStatusBtn').click()
@@ -165,7 +165,7 @@ def startBrowser():
         hide = webdriver.FirefoxOptions()
         hide.headless = True
         driver = webdriver.Firefox(executable_path='Driver/geckodriver', options=hide)
-        #driver = webdriver.Firefox(executable_path='Driver/geckodriver')        
+        #driver = webdriver.Firefox(executable_path='Driver/geckodriver') #wisible browser for test        
     return driver
 
 # autorization on nokia portal
@@ -302,6 +302,7 @@ while True:
     except:
         print(f"{timenow()} ошибка в цикле while")
         print(sys.exc_info()[1])
+        time.sleep(2) #пауза чтобы закрыть скрипт
         continue
 
     print(f"{timenow()} в работе:")
