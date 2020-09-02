@@ -32,3 +32,5 @@
 [0421/164655.624:ERROR:exception_snapshot_win.cc(98)] thread ID 226476 not found in process
 [0422/083403.196:ERROR:process_reader_win.cc(123)] NtOpenThread: {Access Denied} A process has requested access to an object, but has not been granted those access rights. (0xc0000022)
 [0422/083403.224:ERROR:exception_snapshot_win.cc(98)] thread ID 245208 not found in process
+[0831/162408.263:ERROR:process_reader_win.cc(123)] NtOpenThread: {Отказано в доступе} Процесс запросил доступ к объекту, но права на доступ не предоставлены. (0xc0000022)
+[0831/162408.268:ERROR:exception_snapshot_win.cc(99)] thread ID 6000 not found in process

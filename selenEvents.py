@@ -1,3 +1,4 @@
+#! /bin/python3
 # -*- coding: utf-8 -*-
 
 import datetime
@@ -14,8 +15,13 @@ from selenium.webdriver.chrome.options import Options
 
 
 ######################################
-login = input('Enter your login from Nokia portal: ')
-password = getpass('Enter your password from Nokia portal (password will be hide): ')
+try:
+    login = os.getenv("NOK_PORTAL_LOG")
+    password = os.getenv("NOK_PORTAL_PAS")
+except:
+    print("No environment cariables NOK_PORTAL_LOG and NOK_PORTAL_PAS")
+    login = input('Enter your login from Nokia portal: ')
+    password = getpass('Enter your password from Nokia portal (password will be hide): ')
 
 executor_list = {
     u'nikita.baranov@nokia.com' : u'Баранов Никита Викторович',
@@ -160,7 +166,9 @@ def toClose(email, event_id):
 # start browser
 def startBrowser():
     if os.name == "nt":
-        driver = webdriver.Chrome("Driver\\windows.exe")
+        hide = webdriver.ChromeOptions()
+        hide.headless = True
+        driver = webdriver.Chrome(executable_path="Driver\windows.exe", options=hide)
     else:
         hide = webdriver.FirefoxOptions()
         hide.headless = True
