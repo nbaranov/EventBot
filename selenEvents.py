@@ -18,7 +18,9 @@ from selenium.webdriver.chrome.options import Options
 try:
     login = os.getenv("NOK_PORTAL_LOG")
     password = os.getenv("NOK_PORTAL_PAS")
-except:
+    if (login == None) or (password == None):
+        raise ValueError 
+except ValueError:
     print("No environment cariables NOK_PORTAL_LOG and NOK_PORTAL_PAS")
     login = input('Enter your login from Nokia portal: ')
     password = getpass('Enter your password from Nokia portal (password will be hide): ')
@@ -172,14 +174,14 @@ def startBrowser():
     else:
         hide = webdriver.FirefoxOptions()
         hide.headless = True
-        driver = webdriver.Firefox(executable_path='Driver/geckodriver', options=hide)
-        #driver = webdriver.Firefox(executable_path='Driver/geckodriver') #wisible browser for test        
+        #driver = webdriver.Firefox(executable_path='Driver/geckodriver', options=hide)
+        driver = webdriver.Firefox(executable_path='Driver/geckodriver') #wisible browser for test        
     return driver
 
 # autorization on nokia portal
 def autorization(driver):
     driver.get('https://portal.voronezh.gdc.nokia.com/nsn-portal/index.jsf')
-    time.sleep(1)
+    time.sleep(4)
     login_form = driver.find_element_by_id('frmLogin:username')
     login_form.send_keys(login)
     time.sleep(0.2)
