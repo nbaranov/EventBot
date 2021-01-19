@@ -1,4 +1,4 @@
-#! /bin/python3
+﻿#! /bin/python3
 # -*- coding: utf-8 -*-
 
 import datetime
@@ -15,15 +15,9 @@ from selenium.webdriver.chrome.options import Options
 
 
 ######################################
-try:
-    login = os.getenv("NOK_PORTAL_LOG")
-    password = os.getenv("NOK_PORTAL_PAS")
-    if (login == None) or (password == None):
-        raise ValueError 
-except ValueError:
-    print("No environment cariables NOK_PORTAL_LOG and NOK_PORTAL_PAS")
-    login = input('Enter your login from Nokia portal: ')
-    password = getpass('Enter your password from Nokia portal (password will be hide): ')
+
+login = "nikita.baranov" #input('Enter your login from Nokia portal: ')
+password = "8OSmerkaNoKi1"  #getpass('Enter your password from Nokia portal (password will be hide): ')
 
 executor_list = {
     u'nikita.baranov@nokia.com' : u'Баранов Никита Викторович',
@@ -36,6 +30,9 @@ executor_list = {
     u'nikita.lychagin@nokia.com' : u'Лычагин Никита Вячеславович',
     u'dmitry.zaytcev@nokia.com' : u'Зайцев Дмитрий Андреевич',
     u'aleksandr.matveev@nokia.com' : u'Матвеев Александр Юрьевич',
+    u'alexey.tolstoy@nokia.com' : u'Толстой Алексей Николаевич',
+    u'mikhail.turzenok@nokia.com' : u'Турзенок Михаил Алексеевич',
+    u'andrey.kuzminykh@nokia.com' : u'Кузминых Андрей Вячеславович',
 #    u'maxim.rozenshtein@nokia.com' : u'Розенштейн Максим Яковлевич'
 }
 
@@ -106,12 +103,12 @@ def toExecutor(status, email, event):
     if status == good_status[0]:
         try:
             driver.find_element_by_id("eventDetailsFormId:repe:2:btn").click()
-            time.sleep(2)
+            time.sleep(3)
             executor_form = driver.find_element_by_id('changeEventStatusDlgForm:executorOneMenuId_label').click()
-            time.sleep(0.6)
+            time.sleep(1)
             executor_form = driver.find_elements_by_xpath('/html/body/div[34]/div[1]/input')
             executor_form[0].send_keys(executor_list[email])
-            time.sleep(0.6)
+            time.sleep(1)
             executor_form[0].send_keys(Keys.RETURN)
             #driver.find_element_by_id('changeEventStatusDlgForm:changeEventDialogActivityTypesId_label').click()
             #time.sleep(0.6)
@@ -171,6 +168,7 @@ def startBrowser():
         hide = webdriver.ChromeOptions()
         hide.headless = True
         driver = webdriver.Chrome(executable_path="Driver\windows.exe", options=hide)
+        #driver = webdriver.Chrome(executable_path="Driver\windows.exe")
     else:
         hide = webdriver.FirefoxOptions()
         hide.headless = True
@@ -318,9 +316,9 @@ while True:
     print(f"{timenow()} в работе:")
     for line in in_work:
         print(line, in_work[line])
-    print(f"{timenow()} Пропускаем:")
-    for line in unknowt_executor:
-        print(line)
+    #print(f"{timenow()} Пропускаем:")
+    #for line in unknowt_executor:
+    #    print(line)
     #repeat after 5 minutes
     if not checkTime(satrtTime, datetime.datetime.now(), 5):
         time.sleep(300)
