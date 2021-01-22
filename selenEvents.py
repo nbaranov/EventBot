@@ -101,19 +101,12 @@ def toLog(do, name, id):
 # To appoint event to executor
 def toExecutor(status, email, event):
     if status == good_status[0]:
-#        try:
+        try:
             driver.find_element_by_id("eventDetailsFormId:repe:2:btn").click()
             time.sleep(3)
             executor_form = driver.find_element_by_id('changeEventStatusDlgForm:executorOneMenuId_label').click()
-            print('клик в поле')
             time.sleep(1)
-            try:
-                executor_form = driver.find_elements_by_xpath('//*[@id="changeEventStatusDlgForm:executorOneMenuId_filter"]')
-            except:
-                print("а теперь full")
-                executor_form = driver.find_elements_by_xpath('/html/body/div[35]/div[1]/input')
-
-            print('писать в поле')
+            executor_form = driver.find_elements_by_xpath('//*[@id="changeEventStatusDlgForm:executorOneMenuId_filter"]')
             executor_form[0].send_keys(executor_list[email])
             time.sleep(1)
             executor_form[0].send_keys(Keys.RETURN)
@@ -128,7 +121,7 @@ def toExecutor(status, email, event):
             driver.find_element_by_id('changeEventStatusDlgForm:changeEventStatusBtn').click()
             time.sleep(2)
             toLog("назначен на ", executor_list[email], event["id"])
-#        except:
+        except:
             toLog("Произошла ошибка при назначении", "", event["id"])
 
 # to take event in work
